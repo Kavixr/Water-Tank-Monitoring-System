@@ -7,7 +7,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-//Implemented the Display Frame 
 class DisplayFrame extends JFrame {
     private JLabel displayLabel;
 
@@ -32,7 +31,6 @@ class DisplayFrame extends JFrame {
     }
 }
 
-//Implemented the  Alarm Frame
 class AlarmFrame extends JFrame {
     private JLabel alarmLabel;
 
@@ -57,7 +55,6 @@ class AlarmFrame extends JFrame {
     }
 }
 
-//Implement the Splitter Frame
 class SplitterFrame extends JFrame {
     private JLabel splitterLabel;
 
@@ -82,19 +79,40 @@ class SplitterFrame extends JFrame {
     }
 }
 
-//Implemented the water tank 
-class WaterTankFrame extends JFrame{
-    private JSlider slider;
+class WaterTankController{
     private AlarmFrame alarmFrame;
     private DisplayFrame displayFrame;
     private SplitterFrame splitterFrame;
+    
+    private int waterLevel;
 
-    WaterTankFrame(AlarmFrame alarmFrame, SplitterFrame splitterFrame, DisplayFrame displayFrame){
-        this.displayFrame = displayFrame;
+    public void setAlarmFrame(AlarmFrame alarmFrame){
         this.alarmFrame = alarmFrame;
+    }
+    public void setDisplayFrame(DisplayFrame displayFrame){
+        this.displayFrame = displayFrame;
+    }
+    public void setSplitterFrame(SplitterFrame splitterFrame){
         this.splitterFrame = splitterFrame;
+    }
 
+    public void setWaterLevel(int waterLevel){
+        this.waterLevel = waterLevel;
+        notifyObject();
+    }
 
+    public void notifyObject(){
+        this.displayFrame.setDisplayLableValue(waterLevel);
+        this.alarmFrame.setAlarmLableValue(waterLevel);
+        this.splitterFrame.setSplitterLableValue(waterLevel);
+    }
+}
+
+class WaterTankFrame extends JFrame{
+    private JSlider slider;
+    private WaterTankController waterTankController;
+    WaterTankFrame(WaterTankController waterTankController){
+        this.waterTankController = waterTankController;
         setSize(400, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -108,9 +126,7 @@ class WaterTankFrame extends JFrame{
         slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 int waterLevel = slider.getValue();    
-                splitterFrame.setSplitterLableValue(waterLevel);
-                alarmFrame.setAlarmLableValue(waterLevel);
-                displayFrame.setDisplayLableValue(waterLevel);
+                waterTankController.setWaterLevel(waterLevel);
             }
         });
 
@@ -120,12 +136,13 @@ class WaterTankFrame extends JFrame{
     }
 }
 
-
-//implemeted the main method
-public class WaterTank {
-     public static void main(String[] args) {
-
-        new WaterTankFrame(new AlarmFrame(), new SplitterFrame(), new DisplayFrame());
+class WaterTank {
+    public static void main(String[] args) {
+        WaterTankController waterTankController = new WaterTankController();
+        waterTankController.setAlarmFrame(new AlarmFrame());
+        waterTankController.setDisplayFrame(new DisplayFrame());
+        waterTankController.setSplitterFrame(new SplitterFrame());
+        new WaterTankFrame(waterTankController);
+    
     }
- 
 }
