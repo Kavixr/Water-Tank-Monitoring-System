@@ -82,9 +82,50 @@ class SplitterFrame extends JFrame {
     }
 }
 
+//Implemented the water tank 
+class WaterTankFrame extends JFrame{
+    private JSlider slider;
+    private AlarmFrame alarmFrame;
+    private DisplayFrame displayFrame;
+    private SplitterFrame splitterFrame;
+
+    WaterTankFrame(AlarmFrame alarmFrame, SplitterFrame splitterFrame, DisplayFrame displayFrame){
+        this.displayFrame = displayFrame;
+        this.alarmFrame = alarmFrame;
+        this.splitterFrame = splitterFrame;
 
 
+        setSize(400, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("Water Tank");
+        setLayout(new FlowLayout());
 
+        slider = new JSlider(JSlider.VERTICAL);
+        slider.setMajorTickSpacing(10);
+        slider.setPaintLabels(true);
+
+        slider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                int waterLevel = slider.getValue();    
+                splitterFrame.setSplitterLableValue(waterLevel);
+                alarmFrame.setAlarmLableValue(waterLevel);
+                displayFrame.setDisplayLableValue(waterLevel);
+            }
+        });
+
+        add(slider);
+
+        setVisible(true);
+    }
+}
+
+
+//implemeted the main method
 public class WaterTank {
-    
+     public static void main(String[] args) {
+
+        new WaterTankFrame(new AlarmFrame(), new SplitterFrame(), new DisplayFrame());
+    }
+ 
 }
