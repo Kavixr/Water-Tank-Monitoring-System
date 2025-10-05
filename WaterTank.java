@@ -120,11 +120,12 @@ class WaterTankFrame extends JFrame{
     }
 }
 
+
+//implemeted the main method
 public class WaterTank {
      public static void main(String[] args) {
 
         new WaterTankFrame(new AlarmFrame(), new SplitterFrame(), new DisplayFrame());
     }
-
-    
+ 
 }
