@@ -57,6 +57,30 @@ class AlarmFrame extends JFrame {
     }
 }
 
+//Implement the Splitter Frame
+class SplitterFrame extends JFrame {
+    private JLabel splitterLabel;
+
+    SplitterFrame() {
+        setSize(400, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("Splitter");
+        setLayout(new FlowLayout());
+
+        splitterLabel = new JLabel("Off");
+        splitterLabel.setFont(new Font("", Font.BOLD, 36));
+        add(splitterLabel);
+
+        setVisible(true);
+    }
+
+    public void setSplitterLableValue(int waterLevel) {
+        if (waterLevel >= 0 && waterLevel <= 100) {
+            this.splitterLabel.setText(waterLevel >= 90 ? "On" : "Off");
+        }
+    }
+}
 
 
 
