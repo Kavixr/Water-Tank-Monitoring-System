@@ -7,31 +7,13 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-class SMSFrame extends JFrame {
-    private JLabel smsLabel;
-
-    SMSFrame() {
-        setSize(400, 400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle("SMS");
-        setLayout(new FlowLayout());
-
-        smsLabel = new JLabel("SMS Sending : 50");
-        smsLabel.setFont(new Font("", Font.BOLD, 36));
-        add(smsLabel);
-
-        setVisible(true);
-    }
-
-    public void setSMSLableValue(int waterLevel) {
-        if (waterLevel >= 0 && waterLevel <= 100) {
-            this.smsLabel.setText("SMS Sending : " + waterLevel);
-        }
+class WaterLevelObserver extends JFrame{
+    public void update(int waterLevel){
+        //
     }
 }
 
-class DisplayFrame extends JFrame {
+class DisplayFrame extends WaterLevelObserver {
     private JLabel displayLabel;
 
     DisplayFrame() {
@@ -48,14 +30,14 @@ class DisplayFrame extends JFrame {
         setVisible(true);
     }
 
-    public void setDisplayLableValue(int waterLevel) {
+    public void update(int waterLevel) {
         if (waterLevel >= 0 && waterLevel <= 100) {
             this.displayLabel.setText(Integer.toString(waterLevel));
         }
     }
 }
 
-class AlarmFrame extends JFrame {
+class AlarmFrame extends WaterLevelObserver {
     private JLabel alarmLabel;
 
     AlarmFrame() {
@@ -72,14 +54,14 @@ class AlarmFrame extends JFrame {
         setVisible(true);
     }
 
-    public void setAlarmLableValue(int waterLevel) {
+    public void update(int waterLevel) {
         if (waterLevel >= 0 && waterLevel <= 100) {
             this.alarmLabel.setText(waterLevel >= 75 ? "On" : "Off");
         }
     }
 }
 
-class SplitterFrame extends JFrame {
+class SplitterFrame extends WaterLevelObserver {
     private JLabel splitterLabel;
 
     SplitterFrame() {
@@ -96,7 +78,7 @@ class SplitterFrame extends JFrame {
         setVisible(true);
     }
 
-    public void setSplitterLableValue(int waterLevel) {
+    public void update(int waterLevel) {
         if (waterLevel >= 0 && waterLevel <= 100) {
             this.splitterLabel.setText(waterLevel >= 90 ? "On" : "Off");
         }
@@ -104,25 +86,19 @@ class SplitterFrame extends JFrame {
 }
 
 class WaterTankController{
-    private AlarmFrame alarmFrame;
-    private DisplayFrame displayFrame;
-    private SplitterFrame splitterFrame;
-    private SMSFrame smsFrame;
+    private WaterLevelObserver[] observers = new WaterLevelObserver[0];
     
     private int waterLevel;
 
-    public void setAlarmFrame(AlarmFrame alarmFrame){
-        this.alarmFrame = alarmFrame;
+    public void setWaterLevelObserver(WaterLevelObserver observer){
+        WaterLevelObserver[] temp = new WaterLevelObserver[observers.length + 1];
+        for(int i = 0; i < observers.length; i++){
+            temp[i] = observers[i];
+        }
+        temp[temp.length-1] = observer;
+        observers = temp;
     }
-    public void setDisplayFrame(DisplayFrame displayFrame){
-        this.displayFrame = displayFrame;
-    }
-    public void setSplitterFrame(SplitterFrame splitterFrame){
-        this.splitterFrame = splitterFrame;
-    }
-    public void setSMSFrame(SMSFrame smsFrame){
-        this.smsFrame = smsFrame;
-    }
+
 
     public void setWaterLevel(int waterLevel){
         this.waterLevel = waterLevel;
@@ -130,10 +106,9 @@ class WaterTankController{
     }
 
     public void notifyObject(){
-        this.displayFrame.setDisplayLableValue(waterLevel);
-        this.alarmFrame.setAlarmLableValue(waterLevel);
-        this.splitterFrame.setSplitterLableValue(waterLevel);
-        this.smsFrame.setSMSLableValue(waterLevel);
+        for (WaterLevelObserver waterLevelObserver : observers) {
+            waterLevelObserver.update(waterLevel);
+        }
     }
 }
 
@@ -168,10 +143,9 @@ class WaterTankFrame extends JFrame{
 class WaterTank {
     public static void main(String[] args) {
         WaterTankController waterTankController = new WaterTankController();
-        waterTankController.setAlarmFrame(new AlarmFrame());
-        waterTankController.setDisplayFrame(new DisplayFrame());
-        waterTankController.setSplitterFrame(new SplitterFrame());
-        waterTankController.setSMSFrame(new SMSFrame());
+        waterTankController.setWaterLevelObserver(new AlarmFrame());
+        waterTankController.setWaterLevelObserver(new DisplayFrame());
+        waterTankController.setWaterLevelObserver(new SplitterFrame());
         new WaterTankFrame(waterTankController);
     
     }
