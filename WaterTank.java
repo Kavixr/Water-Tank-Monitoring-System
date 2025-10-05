@@ -7,13 +7,11 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-class WaterLevelObserver extends JFrame{
-    public void update(int waterLevel){
-        //
-    }
+interface WaterLevelObserver{
+   void update(int waterLevel);
 }
 
-class SMSFrame extends WaterLevelObserver {
+class SMSFrame extends JFrame implements WaterLevelObserver {
     private JLabel smsLabel;
 
     SMSFrame() {
@@ -38,7 +36,7 @@ class SMSFrame extends WaterLevelObserver {
 }
 
 
-class DisplayFrame extends WaterLevelObserver {
+class DisplayFrame extends JFrame implements WaterLevelObserver {
     private JLabel displayLabel;
 
     DisplayFrame() {
@@ -62,7 +60,7 @@ class DisplayFrame extends WaterLevelObserver {
     }
 }
 
-class AlarmFrame extends WaterLevelObserver {
+class AlarmFrame extends JFrame implements WaterLevelObserver {
     private JLabel alarmLabel;
 
     AlarmFrame() {
@@ -86,7 +84,7 @@ class AlarmFrame extends WaterLevelObserver {
     }
 }
 
-class SplitterFrame extends WaterLevelObserver {
+class SplitterFrame extends JFrame implements WaterLevelObserver {
     private JLabel splitterLabel;
 
     SplitterFrame() {
