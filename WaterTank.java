@@ -7,6 +7,30 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+class SMSFrame extends JFrame {
+    private JLabel smsLabel;
+
+    SMSFrame() {
+        setSize(400, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("SMS");
+        setLayout(new FlowLayout());
+
+        smsLabel = new JLabel("SMS Sending : 50");
+        smsLabel.setFont(new Font("", Font.BOLD, 36));
+        add(smsLabel);
+
+        setVisible(true);
+    }
+
+    public void setSMSLableValue(int waterLevel) {
+        if (waterLevel >= 0 && waterLevel <= 100) {
+            this.smsLabel.setText("SMS Sending : " + waterLevel);
+        }
+    }
+}
+
 class DisplayFrame extends JFrame {
     private JLabel displayLabel;
 
@@ -83,6 +107,7 @@ class WaterTankController{
     private AlarmFrame alarmFrame;
     private DisplayFrame displayFrame;
     private SplitterFrame splitterFrame;
+    private SMSFrame smsFrame;
     
     private int waterLevel;
 
@@ -95,6 +120,9 @@ class WaterTankController{
     public void setSplitterFrame(SplitterFrame splitterFrame){
         this.splitterFrame = splitterFrame;
     }
+    public void setSMSFrame(SMSFrame smsFrame){
+        this.smsFrame = smsFrame;
+    }
 
     public void setWaterLevel(int waterLevel){
         this.waterLevel = waterLevel;
@@ -105,6 +133,7 @@ class WaterTankController{
         this.displayFrame.setDisplayLableValue(waterLevel);
         this.alarmFrame.setAlarmLableValue(waterLevel);
         this.splitterFrame.setSplitterLableValue(waterLevel);
+        this.smsFrame.setSMSLableValue(waterLevel);
     }
 }
 
@@ -142,6 +171,7 @@ class WaterTank {
         waterTankController.setAlarmFrame(new AlarmFrame());
         waterTankController.setDisplayFrame(new DisplayFrame());
         waterTankController.setSplitterFrame(new SplitterFrame());
+        waterTankController.setSMSFrame(new SMSFrame());
         new WaterTankFrame(waterTankController);
     
     }
