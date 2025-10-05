@@ -7,13 +7,36 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-class WaterLevelObserver extends JFrame{
-    public void update(int waterLevel){
-        //
+interface WaterLevelObserver{
+   void update(int waterLevel);
+}
+
+class SMSFrame extends JFrame implements WaterLevelObserver {
+    private JLabel smsLabel;
+
+    SMSFrame() {
+        setSize(400, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("SMS");
+        setLayout(new FlowLayout());
+
+        smsLabel = new JLabel("SMS Sending : 50");
+        smsLabel.setFont(new Font("", Font.BOLD, 36));
+        add(smsLabel);
+
+        setVisible(true);
+    }
+
+    public void update(int waterLevel) {
+        if (waterLevel >= 0 && waterLevel <= 100) {
+            this.smsLabel.setText("SMS Sending : " + waterLevel);
+        }
     }
 }
 
-class DisplayFrame extends WaterLevelObserver {
+
+class DisplayFrame extends JFrame implements WaterLevelObserver {
     private JLabel displayLabel;
 
     DisplayFrame() {
@@ -37,7 +60,7 @@ class DisplayFrame extends WaterLevelObserver {
     }
 }
 
-class AlarmFrame extends WaterLevelObserver {
+class AlarmFrame extends JFrame implements WaterLevelObserver {
     private JLabel alarmLabel;
 
     AlarmFrame() {
@@ -61,7 +84,7 @@ class AlarmFrame extends WaterLevelObserver {
     }
 }
 
-class SplitterFrame extends WaterLevelObserver {
+class SplitterFrame extends JFrame implements WaterLevelObserver {
     private JLabel splitterLabel;
 
     SplitterFrame() {
@@ -146,6 +169,7 @@ class WaterTank {
         waterTankController.setWaterLevelObserver(new AlarmFrame());
         waterTankController.setWaterLevelObserver(new DisplayFrame());
         waterTankController.setWaterLevelObserver(new SplitterFrame());
+        waterTankController.setWaterLevelObserver(new SMSFrame());
         new WaterTankFrame(waterTankController);
     
     }
